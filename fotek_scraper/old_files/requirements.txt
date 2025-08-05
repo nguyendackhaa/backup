@@ -1,0 +1,21 @@
+# Web scraping dependencies
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+selenium>=4.15.0
+
+# Data processing
+pandas>=2.1.0
+openpyxl>=3.1.0
+
+# Image processing
+Pillow>=10.0.0
+
+# AI/ML dependencies
+google-generativeai>=0.3.0
+
+# Utility libraries
+pathlib2>=2.3.7
+
+# Optional dependencies for better performance
+lxml>=4.9.0
+html5lib>=1.1

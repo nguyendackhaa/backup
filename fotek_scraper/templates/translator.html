@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fotek Product Translator - Dịch tên sản phẩm</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            margin: 2rem auto;
+            max-width: 1000px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 2.5rem;
+        }
+        
+        .header p {
+            margin: 0.5rem 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .content {
+            padding: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .btn-translate {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 15px;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .btn-translate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            color: white;
+        }
+        
+        .btn-translate:disabled {
+            background: #6c757d;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn-excel {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+            border-radius: 15px;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .btn-excel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.3);
+            color: white;
+        }
+        
+        .result-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            display: none;
+        }
+        
+        .result-card.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .result-item {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
+        }
+        
+        .result-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+        
+        .result-value {
+            color: #212529;
+            font-size: 1.1rem;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        
+        .status-online {
+            background: #28a745;
+        }
+        
+        .status-offline {
+            background: #dc3545;
+        }
+        
+        .example-section {
+            background: #e3f2fd;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .example-item {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 1rem;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .nav-tabs {
+            border-bottom: 2px solid #e9ecef;
+            margin-bottom: 2rem;
+        }
+        
+        .nav-tabs .nav-link {
+            border: none;
+            border-radius: 15px 15px 0 0;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            color: #6c757d;
+            background: #f8f9fa;
+            margin-right: 0.5rem;
+        }
+        
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .tab-content {
+            padding: 1rem 0;
+        }
+        
+        .download-section {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            display: none;
+        }
+        
+        .download-section.show {
+            display: block;
+        }
+        
+        .progress-section {
+            margin-top: 1.5rem;
+            display: none;
+        }
+        
+        .progress-section.show {
+            display: block;
+        }
+        
+        .progress {
+            height: 25px;
+            border-radius: 15px;
+            background: #e9ecef;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-container">
+            <!-- Header -->
+            <div class="header">
+                <h1><i class="fas fa-language"></i> Fotek Product Translator</h1>
+                <p>Dịch tên sản phẩm tiếng Anh sang tiếng Việt với AI Gemini & Xuất Excel</p>
+                <div class="mt-2">
+                    <span class="status-indicator" id="statusIndicator"></span>
+                    <span id="statusText">Đang kiểm tra...</span>
+                </div>
+            </div>
+            
+            <!-- Content -->
+            <div class="content">
+                <!-- Navigation Tabs -->
+                <ul class="nav nav-tabs" id="translatorTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="single-tab" data-bs-toggle="tab" data-bs-target="#single" type="button" role="tab">
+                            <i class="fas fa-edit"></i> Dịch đơn lẻ
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="batch-tab" data-bs-toggle="tab" data-bs-target="#batch" type="button" role="tab">
+                            <i class="fas fa-list"></i> Dịch hàng loạt & Xuất Excel
+                        </button>
+                    </li>
+                </ul>
+                
+                <!-- Tab Content -->
+                <div class="tab-content" id="translatorTabContent">
+                    <!-- Single Translation Tab -->
+                    <div class="tab-pane fade show active" id="single" role="tabpanel">
+                        <form id="translateForm">
+                            <div class="form-group">
+                                <label for="englishText" class="form-label">
+                                    <i class="fas fa-edit"></i> Tên sản phẩm tiếng Anh:
+                                </label>
+                                <textarea 
+                                    class="form-control" 
+                                    id="englishText" 
+                                    rows="4" 
+                                    placeholder="Nhập tên sản phẩm tiếng Anh cần dịch...&#10;Ví dụ: PS Series Inductive Proximity Sensor"
+                                    required
+                                ></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-translate" id="translateBtn">
+                                <i class="fas fa-magic"></i> Dịch với AI Gemini
+                            </button>
+                        </form>
+                        
+                        <!-- Single Result -->
+                        <div class="result-card" id="resultCard">
+                            <h4><i class="fas fa-check-circle text-success"></i> Kết quả dịch</h4>
+                            <div class="result-item">
+                                <div class="result-label">Tên gốc (Tiếng Anh):</div>
+                                <div class="result-value" id="originalText"></div>
+                            </div>
+                            <div class="result-item">
+                                <div class="result-label">Tên đã dịch (Tiếng Việt):</div>
+                                <div class="result-value" id="translatedText"></div>
+                            </div>
+                            <div class="result-item">
+                                <div class="result-label">Thời gian:</div>
+                                <div class="result-value" id="timestamp"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Batch Translation Tab -->
+                    <div class="tab-pane fade" id="batch" role="tabpanel">
+                        <form id="batchTranslateForm">
+                            <div class="form-group">
+                                <label for="batchEnglishText" class="form-label">
+                                    <i class="fas fa-list"></i> Danh sách tên sản phẩm tiếng Anh (mỗi dòng một sản phẩm):
+                                </label>
+                                <textarea 
+                                    class="form-control" 
+                                    id="batchEnglishText" 
+                                    rows="10" 
+                                    placeholder="Nhập danh sách tên sản phẩm tiếng Anh, mỗi dòng một sản phẩm...&#10;&#10;Ví dụ:&#10;PS Series Inductive Proximity Sensor&#10;E2E Series Capacitive Proximity Sensor&#10;F Series Standard Type Photo Sensor&#10;H5-AN Series Temperature Controller"
+                                    required
+                                ></textarea>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button type="submit" class="btn btn-excel" id="batchTranslateBtn">
+                                        <i class="fas fa-magic"></i> Dịch & Tạo Excel
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-secondary" id="clearBatchBtn">
+                                        <i class="fas fa-trash"></i> Xóa danh sách
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        
+                        <!-- Progress Section -->
+                        <div class="progress-section" id="progressSection">
+                            <h5><i class="fas fa-spinner fa-spin"></i> Đang xử lý...</h5>
+                            <div class="progress">
+                                <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <p class="mt-2" id="progressText">Đang chuẩn bị...</p>
+                        </div>
+                        
+                        <!-- Download Section -->
+                        <div class="download-section" id="downloadSection">
+                            <h4><i class="fas fa-file-excel text-success"></i> Hoàn thành!</h4>
+                            <p id="downloadMessage"></p>
+                            <button type="button" class="btn btn-success" id="downloadBtn">
+                                <i class="fas fa-download"></i> Tải xuống file Excel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Loading -->
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Đang xử lý với AI Gemini...</p>
+                </div>
+                
+                <!-- Error Message -->
+                <div class="error-message" id="errorMessage" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span id="errorText"></span>
+                </div>
+                
+                <!-- Examples -->
+                <div class="example-section">
+                    <h5><i class="fas fa-lightbulb"></i> Ví dụ tên sản phẩm:</h5>
+                    <div class="example-item">
+                        <strong>PS Series Inductive Proximity Sensor</strong> → Cảm biến tiệm cận cảm ứng dòng PS FOTEK
+                    </div>
+                    <div class="example-item">
+                        <strong>E2E Series Capacitive Proximity Sensor</strong> → Cảm biến tiệm cận điện dung dòng E2E FOTEK
+                    </div>
+                    <div class="example-item">
+                        <strong>F Series Standard Type Photo Sensor</strong> → Cảm biến quang điện loại chuẩn dòng F FOTEK
+                    </div>
+                    <div class="example-item">
+                        <strong>H5-AN Series Temperature Controller</strong> → Bộ điều khiển nhiệt độ dòng H5-AN FOTEK
+                    </div>
+                    <div class="example-item">
+                        <strong>ASR-AA Series Single Phase Enhanced Heat sink Solid State module(SSR)</strong> → Module rơ le bán dẫn một pha tản nhiệt nâng cao dòng ASR-AA FOTEK
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <div class="footer">
+                <p>Powered by Google Gemini AI | Developed by Assistant AI</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentFilename = '';
+        
+        // Kiểm tra trạng thái hệ thống
+        async function checkSystemStatus() {
+            try {
+                const response = await fetch('/health');
+                const data = await response.json();
+                
+                const statusIndicator = document.getElementById('statusIndicator');
+                const statusText = document.getElementById('statusText');
+                
+                if (data.gemini_available) {
+                    statusIndicator.className = 'status-indicator status-online';
+                    statusText.textContent = 'Gemini AI: Sẵn sàng';
+                } else {
+                    statusIndicator.className = 'status-indicator status-offline';
+                    statusText.textContent = 'Gemini AI: Không khả dụng';
+                }
+            } catch (error) {
+                const statusIndicator = document.getElementById('statusIndicator');
+                const statusText = document.getElementById('statusText');
+                statusIndicator.className = 'status-indicator status-offline';
+                statusText.textContent = 'Lỗi kết nối';
+            }
+        }
+        
+        // Xử lý form dịch đơn lẻ
+        document.getElementById('translateForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const englishText = document.getElementById('englishText').value.trim();
+            if (!englishText) {
+                showError('Vui lòng nhập tên sản phẩm cần dịch');
+                return;
+            }
+            
+            // Hiển thị loading
+            showLoading(true);
+            hideResult();
+            hideError();
+            
+            try {
+                const response = await fetch('/translate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: englishText })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showResult(result);
+                } else {
+                    showError(result.error || 'Có lỗi xảy ra khi dịch');
+                }
+            } catch (error) {
+                showError('Lỗi kết nối đến server');
+            } finally {
+                showLoading(false);
+            }
+        });
+        
+        // Xử lý form dịch hàng loạt
+        document.getElementById('batchTranslateForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const batchText = document.getElementById('batchEnglishText').value.trim();
+            if (!batchText) {
+                showError('Vui lòng nhập danh sách tên sản phẩm cần dịch');
+                return;
+            }
+            
+            // Hiển thị progress
+            showProgress();
+            hideError();
+            hideDownload();
+            
+            try {
+                const response = await fetch('/translate_batch', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: batchText })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    currentFilename = result.filename;
+                    showDownload(result.message, result.results_count);
+                } else {
+                    showError(result.error || 'Có lỗi xảy ra khi dịch hàng loạt');
+                }
+            } catch (error) {
+                showError('Lỗi kết nối đến server');
+            } finally {
+                hideProgress();
+            }
+        });
+        
+        // Xử lý nút xóa danh sách
+        document.getElementById('clearBatchBtn').addEventListener('click', function() {
+            document.getElementById('batchEnglishText').value = '';
+            hideDownload();
+            hideError();
+        });
+        
+        // Xử lý nút download
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            if (currentFilename) {
+                window.open(`/download_excel/${currentFilename}`, '_blank');
+            }
+        });
+        
+        // Hiển thị loading
+        function showLoading(show) {
+            const loading = document.getElementById('loading');
+            const translateBtn = document.getElementById('translateBtn');
+            
+            if (show) {
+                loading.style.display = 'block';
+                translateBtn.disabled = true;
+                translateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
+            } else {
+                loading.style.display = 'none';
+                translateBtn.disabled = false;
+                translateBtn.innerHTML = '<i class="fas fa-magic"></i> Dịch với AI Gemini';
+            }
+        }
+        
+        // Hiển thị progress
+        function showProgress() {
+            const progressSection = document.getElementById('progressSection');
+            const batchTranslateBtn = document.getElementById('batchTranslateBtn');
+            
+            progressSection.classList.add('show');
+            batchTranslateBtn.disabled = true;
+            batchTranslateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
+            
+            // Simulate progress
+            let progress = 0;
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 90) progress = 90;
+                
+                progressBar.style.width = progress + '%';
+                progressText.textContent = `Đang xử lý... ${Math.round(progress)}%`;
+            }, 500);
+            
+            // Store interval for cleanup
+            window.progressInterval = interval;
+        }
+        
+        // Ẩn progress
+        function hideProgress() {
+            const progressSection = document.getElementById('progressSection');
+            const batchTranslateBtn = document.getElementById('batchTranslateBtn');
+            
+            progressSection.classList.remove('show');
+            batchTranslateBtn.disabled = false;
+            batchTranslateBtn.innerHTML = '<i class="fas fa-magic"></i> Dịch & Tạo Excel';
+            
+            // Clear interval
+            if (window.progressInterval) {
+                clearInterval(window.progressInterval);
+            }
+            
+            // Complete progress
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = '100%';
+        }
+        
+        // Hiển thị kết quả
+        function showResult(result) {
+            document.getElementById('originalText').textContent = result.original;
+            document.getElementById('translatedText').textContent = result.translated;
+            document.getElementById('timestamp').textContent = result.timestamp;
+            
+            const resultCard = document.getElementById('resultCard');
+            resultCard.classList.add('show');
+        }
+        
+        // Ẩn kết quả
+        function hideResult() {
+            const resultCard = document.getElementById('resultCard');
+            resultCard.classList.remove('show');
+        }
+        
+        // Hiển thị download
+        function showDownload(message, count) {
+            document.getElementById('downloadMessage').textContent = message;
+            const downloadSection = document.getElementById('downloadSection');
+            downloadSection.classList.add('show');
+        }
+        
+        // Ẩn download
+        function hideDownload() {
+            const downloadSection = document.getElementById('downloadSection');
+            downloadSection.classList.remove('show');
+        }
+        
+        // Hiển thị lỗi
+        function showError(message) {
+            document.getElementById('errorText').textContent = message;
+            document.getElementById('errorMessage').style.display = 'block';
+        }
+        
+        // Ẩn lỗi
+        function hideError() {
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+        
+        // Khởi tạo
+        document.addEventListener('DOMContentLoaded', function() {
+            checkSystemStatus();
+            
+            // Kiểm tra trạng thái mỗi 30 giây
+            setInterval(checkSystemStatus, 30000);
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,21 @@
+2025-08-01 09:02:55,137 - WARNING - Không có API key cho Gemini AI. Chức năng dịch và trích xuất sẽ bị vô hiệu hóa.
+2025-08-01 09:02:55,141 - INFO - FotekScraper đã được khởi tạo thành công
+2025-08-01 09:02:55,143 - INFO - Bắt đầu trích xuất series từ: https://www.fotek.com.tw/en-gb/product-category/72
+2025-08-01 09:02:56,755 - INFO - Tìm thấy 8 series cards
+2025-08-01 09:02:56,757 - INFO - Đã trích xuất series: PS Series Inductive Proximity Sensor
+2025-08-01 09:02:56,757 - INFO - Đã trích xuất series: PM Series Inductive Proximity Sensor
+2025-08-01 09:02:56,758 - INFO - Đã trích xuất series: TW Series Two Wires Inductive Proximity Sensor
+2025-08-01 09:02:56,759 - INFO - Đã trích xuất series: CP Series Capacitive Proximity Sensor
+2025-08-01 09:02:56,759 - INFO - Đã trích xuất series: EX Series High compact Proximity Sensor
+2025-08-01 09:02:56,760 - INFO - Đã trích xuất series: M12&M18 Series Linear Proximity Sensor
+2025-08-01 09:02:56,760 - INFO - Đã trích xuất series: PSA For Power Clamps Proximity Sensor
+2025-08-01 09:02:56,761 - INFO - Đã trích xuất series: Proximity Sensor Accessories
+2025-08-01 09:02:56,761 - INFO - Hoàn thành trích xuất 8 series
+2025-08-01 09:02:56,770 - WARNING - Không có API key cho Gemini AI. Chức năng dịch và trích xuất sẽ bị vô hiệu hóa.
+2025-08-01 09:02:56,772 - INFO - FotekScraper đã được khởi tạo thành công
+2025-08-01 09:02:56,772 - INFO - Bắt đầu trích xuất sản phẩm từ series: https://www.fotek.com.tw/en-gb/product-category/113
+2025-08-01 09:02:58,055 - INFO - Tìm thấy 0 nhóm sản phẩm
+2025-08-01 09:02:58,056 - INFO - Hoàn thành trích xuất 0 sản phẩm từ series
+2025-08-01 09:02:58,064 - WARNING - Không có API key cho Gemini AI. Chức năng dịch và trích xuất sẽ bị vô hiệu hóa.
+2025-08-01 09:02:58,069 - INFO - FotekScraper đã được khởi tạo thành công
+2025-08-01 09:02:59,482 - ERROR - Lỗi khi xử lý ảnh https://www.fotek.com.tw/image/catalog/product/Item/PROXI-PS-05N.png: [WinError 3] The system cannot find the path specified: ''
